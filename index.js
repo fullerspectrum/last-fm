@@ -134,6 +134,46 @@ class LastFM {
       .filter(track => track.listeners == null || track.listeners >= this._minTrackListeners)
   }
 
+  _parseUser(user){
+    const data = {
+      type: 'user',
+      name: user['name'],
+      realname: user['realname'],
+      url: user['url'],
+      country: user['country'],
+      id: user['id'],
+      age: user['age'],
+      gender: user['gender'], 
+      subscriber: user['subscriber'],
+      playcount: user['playcount'],
+      playlists: user['playlists'],
+      bootstrap: user['bootstrap'],
+      registered: user['registered']
+    }
+    return data;
+  }
+
+  _parseFriends(users){
+    return users
+      .map(user => {
+        return {
+          type: 'user',
+          name: user.name,
+          realname: user.realname,
+          url: user.url,
+          id: user.id,
+          age: user.age,
+          gender: user.gender, 
+          country: user.country,
+          subscriber: user.subscriber,
+          playcount: user.playcount,
+          playlists: user.playlists,
+          bootstrap: user.bootstrap,
+          registered: user.registered
+        }
+      })
+  }
+
   /**
    * CONVENIENCE API
    */
@@ -621,6 +661,42 @@ class LastFM {
       cb(null, {
         meta: this._parseMeta(data, opts),
         result: this._parseTracks(data.trackmatches.track)
+      })
+    })
+  }
+
+  /**
+   * USER API
+   */
+
+  userInfo(opts, cb){
+    if(!opts.userName){
+      return cb(new Error('Missing required param: userName'))
+    }
+    const params = {
+      method: 'user.getInfo',
+      user: opts.userName
+    }
+    this._sendRequest(params, 'user', (err, data) => {
+      if (err) return cb(err)
+      cb(null, {
+        result: this._parseUser(data)
+      })
+    })
+  }
+  userFriends(opts, cb){
+    if(!opts.userName){
+      return cb(new Error('Missing required param: userName'))
+    }
+    const params = {
+      method: 'user.getFriends',
+      user: opts.userName
+    }
+    this._sendRequest(params, 'friends', (err, data) => {
+      if(err) return cb(err)
+      cb(null, {
+        result: this._parseFriends(data.user)
+        //result: console.log(data.user)
       })
     })
   }
