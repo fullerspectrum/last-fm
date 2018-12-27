@@ -133,7 +133,9 @@ class LastFM {
       })
       .filter(track => track.listeners == null || track.listeners >= this._minTrackListeners)
   }
-
+/* As far as I can tell, age, gender, and bootstrap(?) are dead. Also, playlists and ID... is this site okay
+   Okay, double check. The site no longer even keeps track of age or gender. As far as ID... shrug. If anyone knows what bootstrap is lmk.
+*/
   _parseUser(user){
     const data = {
       type: 'user',
@@ -141,13 +143,13 @@ class LastFM {
       realname: user['realname'],
       url: user['url'],
       country: user['country'],
-      id: user['id'],
-      age: user['age'],
-      gender: user['gender'], 
+      //id: user['id'],
+      //age: user['age'],
+      //gender: user['gender'], 
       subscriber: user['subscriber'],
       playcount: user['playcount'],
-      playlists: user['playlists'],
-      bootstrap: user['bootstrap'],
+      //playlists: user['playlists'],
+      //bootstrap: user['bootstrap'],
       registered: user['registered']
     }
     return data;
@@ -161,14 +163,14 @@ class LastFM {
           name: user.name,
           realname: user.realname,
           url: user.url,
-          id: user.id,
-          age: user.age,
-          gender: user.gender, 
+          //id: user.id,
+          //age: user.age,
+          //gender: user.gender, 
           country: user.country,
           subscriber: user.subscriber,
           playcount: user.playcount,
-          playlists: user.playlists,
-          bootstrap: user.bootstrap,
+          //playlists: user.playlists,
+          //bootstrap: user.bootstrap,
           registered: user.registered
         }
       })
@@ -684,6 +686,7 @@ class LastFM {
       })
     })
   }
+
   userFriends(opts, cb){
     if(!opts.userName){
       return cb(new Error('Missing required param: userName'))
